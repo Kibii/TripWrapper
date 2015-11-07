@@ -20,12 +20,17 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'client')));
+
+// This will change in production since we'll be using the dist folder
+app.use(express.static(path.join(__dirname, './client')));
+// This covers serving up the index page
+app.use(express.static(path.join(__dirname, './client/.tmp')));
+app.use(express.static(path.join(__dirname, './client/app')));
 
 app.use(apiEndpoint('/'), apiIndex);
 
 app.get('*', function(req, res) {
-  res.sendfile('./client/app/index.html');
+  res.sendFile(path.join(__dirname, './client/app/index.html'));
 });
 
 // catch 404 and forward to error handler
